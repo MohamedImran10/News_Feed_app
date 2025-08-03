@@ -1,5 +1,5 @@
-<img width="1909" height="964" alt="Screenshot From 2025-08-03 16-01-08" src="https://github.com/user-attachments/assets/db238d52-e088-482f-9782-66ae1bb507f3" />
-# RSS Feed Reader
+
+## RSS Feed Reader
 
 A modern, responsive RSS feed reader built with Django, Bootstrap, and vanilla JavaScript. This application provides a clean, user-friendly interface to read and manage RSS feeds with advanced features like auto-refresh, keyboard shortcuts, and accessibility support.
 
@@ -218,7 +218,7 @@ python manage.py test
 
 ##Output
 
-<img width="1909" height="964" alt="Screenshot From 2025-08-03 16-01-08" src="https://github.com/user-attachments/assets/291adaa8-ddcb-4b98-b98e-996a9f3a6a4d" />
+<img width="1909" height="964" alt="Screenshot From 2025-08-03 16-01-08" src="https://github.com/user-attachments/assets/db238d52-e088-482f-9782-66ae1bb507f3" />
 
 
 ## 📈 Future Enhancements
