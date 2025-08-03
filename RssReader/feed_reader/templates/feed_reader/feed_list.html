@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS Feed Reader</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'feed_reader/css/styles.css' %}">
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <meta name="description" content="Stay updated with the latest news from India with our RSS Feed Reader">
+    <meta name="keywords" content="RSS, news, feed reader, India news, technology, business">
+    <meta name="author" content="RSS Feed Reader">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="RSS Feed Reader">
+    <meta property="og:description" content="Stay updated with the latest news from India">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="feed-header">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center justify-content-center gap-3 mb-4">
+                        <i class="bi bi-rss feed-title-icon"></i>
+                        <h1 class="display-4 fw-bold mb-0">RSS Feed Reader</h1>
+                    </div>
+                    <p class="lead mb-0">Stay updated with the latest news from India</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
+                <!-- Loading Spinner -->
+                <div class="loading-spinner text-center mb-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Refreshing feeds...</p>
+                </div>
+
+                <!-- Feed Sections -->
+                {% for feed in feeds %}
+                <div class="feed-card card">
+                    <!-- Feed Header -->
+                    <div class="feed-section-header">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <h2 class="feed-section-title h4">{{ feed.feed_title }}</h2>
+                            <div class="last-updated d-flex align-items-center gap-2">
+                                <i class="bi bi-clock"></i>
+                                <span>Last updated: <span class="update-time" data-timestamp="{{ feed.last_updated.isoformat }}">{{ feed.last_updated|date:"M j, Y, g:i A" }}</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Articles -->
+                    <div class="card-body">
+                        {% for entry in feed.feed_entries %}
+                        <div class="article-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+                                <div class="flex-grow-1">
+                                    <h3 class="h5 mb-3">
+                                        <a href="{{ entry.link }}" target="_blank" rel="noopener noreferrer" class="article-title">
+                                            <span class="flex-grow-1">{{ entry.title }}</span>
+                                            <i class="bi bi-box-arrow-up-right external-link-icon"></i>
+                                        </a>
+                                    </h3>
+                                    
+                                    <p class="article-summary">
+                                        {% if entry.summary %}
+                                            <span class="summary-text" data-full-text="{{ entry.summary }}">{{ entry.summary|truncatewords:30 }}</span>
+                                        {% else %}
+                                            No summary available.
+                                        {% endif %}
+                                    </p>
+                                    
+                                    <div class="article-date">
+                                        Published: 
+                                        {% if entry.published != 'No date available' and entry.published != 'Invalid date format' %}
+                                            <span class="published-date" data-timestamp="{{ entry.published.isoformat }}">{{ entry.published|date:"M j, Y, g:i A" }}</span>
+                                        {% else %}
+                                            {{ entry.published }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-info-circle me-2"></i>
+                            No articles available for this feed.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="no-feeds">
+                    <i class="bi bi-exclamation-circle display-1 text-muted mb-3"></i>
+                    <h3 class="h4 mb-3">No feeds available</h3>
+                    <p>Please check back later or contact the administrator.</p>
+                    <button class="btn btn-primary mt-3" onclick="window.location.reload()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Try Again
+                    </button>
+                </div>
+                {% endfor %}
+
+                <!-- Footer -->
+                <div class="refresh-time">
+                    <i class="bi bi-arrow-clockwise me-2"></i>
+                    Last refreshed: <span id="current-time">{{ "now"|date:"g:i A" }}</span>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            Press <kbd>H</kbd> for keyboard shortcuts | Auto-refresh every 5 minutes
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% static 'feed_reader/js/app.js' %}"></script>
+</body>
+</html>
