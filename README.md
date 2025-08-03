@@ -216,9 +216,9 @@ Run Django tests:
 python manage.py test
 ```
 
-##Output
+## Output
 
-<img width="1909" height="964" alt="Screenshot From 2025-08-03 16-01-08" src="https://github.com/user-attachments/assets/db238d52-e088-482f-9782-66ae1bb507f3" />
+<img width="1527" height="756" alt="Screenshot From 2025-08-03 16-05-34" src="https://github.com/user-attachments/assets/1666c2de-b760-4a09-98c2-0d6bdabc4c7c" />
 
 
 ## 📈 Future Enhancements
