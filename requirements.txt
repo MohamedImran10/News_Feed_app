@@ -1,0 +1,15 @@
+# Django RSS Reader Requirements
+
+# Core Django framework
+Django==5.2.2
+
+# RSS feed parsing
+feedparser==6.0.11
+
+# Date parsing utilities
+python-dateutil==2.9.0.post0
+
+# Additional useful packages for Django development
+asgiref==3.8.1
+sqlparse==0.5.1
+tzdata==2024.1
