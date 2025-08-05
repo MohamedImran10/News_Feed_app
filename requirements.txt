@@ -9,7 +9,16 @@ feedparser==6.0.11
 # Date parsing utilities
 python-dateutil==2.9.0.post0
 
-# Additional useful packages for Django development
-asgiref==3.8.1
+# WSGI server for production deployment
+gunicorn==23.0.0
+
+# Additional Django dependencies
+asgiref==3.9.1
 sqlparse==0.5.1
-tzdata==2024.1
+tzdata==2025.2
+
+# Optional: Additional packages for enhanced functionality
+aiohttp==3.12.14
+channels==4.2.0
+django-redis==5.4.0
+typing_extensions==4.14.1
