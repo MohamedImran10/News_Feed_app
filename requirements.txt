@@ -2,7 +2,6 @@ aiohappyeyeballs==2.6.1
 aiohttp==3.12.14
 aiosignal==1.4.0
 annotated-types==0.7.0
-application-utility==1.4.0
 argcomplete==3.6.2
 asgiref==3.9.1
 async-timeout==4.0.3
