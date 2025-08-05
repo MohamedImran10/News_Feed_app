@@ -14,7 +14,7 @@ beautifulsoup4==4.13.3
 blessed==1.20.0
 blinker==1.8.2
 bpython==0.25
-btrfsutil==6.15
+#btrfsutil==6.15
 cachetools==5.5.0
 certifi==2025.7.14
 cffi==1.17.1
