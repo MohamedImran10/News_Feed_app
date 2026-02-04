@@ -1,21 +1,27 @@
-# News Feed App
+# 📰 RSS Feed Reader
 
-A Django-based RSS feed reader application that displays news feeds in a clean, user-friendly interface.
+A lightweight Django-based RSS feed reader that aggregates and displays the latest news from major Indian news sources in a clean, responsive interface.
 
-## Features
+## ✨ Features
 
-- RSS feed parsing and display
-- Clean, responsive UI
-- Caching for improved performance
-- Production-ready with Render deployment
+- **Multi-Source RSS Aggregation** - Fetches news from 7+ major Indian news outlets (Times of India, NDTV, The Hindu, Hindustan Times, Indian Express, Economic Times, Zee News)
+- **Smart Caching** - 5-minute cache to reduce server load and improve response time
+- **Responsive Design** - Mobile-friendly Bootstrap 5 UI with smooth animations
+- **Feed Validation** - Robust error handling for malformed or inaccessible feeds
+- **Real-time Updates** - Auto-refresh display with timestamp updates
+- **Production-Ready** - Deployed on Render with WhiteNoise static file serving
+- **Clean Article Display** - Shows title, summary, published date, and direct links to full articles
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Backend:** Django 5.1.11
-- **Server:** Gunicorn
-- **Static Files:** WhiteNoise
-- **Parser:** Feedparser
-- **Database:** SQLite (development), PostgreSQL (recommended for production)
+- **Server:** Gunicorn 23.0.0
+- **Static Files:** WhiteNoise 6.6.0
+- **RSS Parser:** Feedparser 6.0.11
+- **Frontend:** Bootstrap 5.3, HTML5, CSS3, JavaScript
+- **Database:** SQLite (development)
+- **Caching:** Django in-memory cache
+- **Deployment:** Render
 
 ## Installation
 
@@ -117,74 +123,132 @@ SECURE_BROWSER_XSS_FILTER=True
 SECURE_CONTENT_TYPE_NOSNIFF=True
 ```
 
-## API Endpoints
+## 📰 Supported News Sources
 
-- `GET /` - Main feed page
-- `GET /feed/` - Feed list view
+The app aggregates RSS feeds from these major Indian news outlets:
 
-## Development
+1. **Times of India** - https://timesofindia.indiatimes.com/rssfeedstopstories.cms
+2. **NDTV News** - https://feeds.feedburner.com/ndtvnews-top-stories
+3. **The Hindu** - https://www.thehindu.com/news/feeder/default.rss
+4. **Hindustan Times** - https://www.hindustantimes.com/rss/topnews/rssfeed.xml
+5. **Indian Express** - https://indianexpress.com/feed/
+6. **Economic Times** - https://economictimes.indiatimes.com/rssfeedstopstories.cms
+7. **Zee News** - https://zeenews.india.com/rss/india-national-news.xml
 
-### Create Superuser (Admin)
+Each source displays up to 5 latest articles with title, summary, publication date, and direct link.
 
-```bash
-python manage.py createsuperuser
-```
+## 🚀 How It Works
 
-Access admin at `http://localhost:8000/admin`
+1. **Feed Fetching**: The `feed_list` view in `views.py` fetches RSS feeds from 7 Indian news sources
+2. **Caching**: Each feed is cached for 5 minutes using Django's cache framework to reduce load
+3. **Error Handling**: Malformed feeds or network errors are gracefully handled - failed feeds are skipped
+4. **Data Processing**: Articles are extracted with title, link, summary, and published date
+5. **Rendering**: Data is passed to the template and displayed with Bootstrap styling
+6. **Auto-Refresh**: JavaScript updates timestamps in real-time without full page reload
 
-### Run Tests
+## 📦 Dependencies
 
-```bash
-python manage.py test
-```
-
-### Migrations
-
-Create migrations:
-```bash
-python manage.py makemigrations
-```
-
-Apply migrations:
-```bash
-python manage.py migrate
-```
-
-## Dependencies
-
+### Core
 - Django 5.1.11
 - feedparser 6.0.11
 - python-dateutil 2.9.0
-- gunicorn 23.0.0
-- whitenoise 6.6.0
-- python-decouple 3.8
 
-See `requirements.txt` for complete list.
+### Production
+- gunicorn 23.0.0 (WSGI server)
+- whitenoise 6.6.0 (static file serving)
+- python-decouple 3.8 (environment variables)
 
-## Troubleshooting
+### Additional
+- asgiref 3.9.1
+- sqlparse 0.5.1
+- tzdata 2025.2
+
+See `requirements.txt` for complete list with pinned versions.
+
+## 🌐 Endpoints
+
+| URL | Method | Description |
+|-----|--------|-------------|
+| `/` | GET | Main page - displays all RSS feeds |
+| `/feed/` | GET | Feed list view (same as `/`) |
+
+## 🔧 Customization
+
+### Add New News Sources
+
+Edit `RssReader/feed_reader/views.py` in the `feed_list` function:
+
+```python
+feed_urls = [
+    'https://existing-feed.com/rss',
+    'https://your-new-feed.com/rss',  # Add here
+]
+```
+
+### Change Cache Duration
+
+In `views.py`, modify the `cache_time` variable:
+
+```python
+cache_time = 300  # 5 minutes (in seconds)
+```
+
+### Customize Article Display
+
+Edit the template at `feed_reader/templates/feed_reader/feed_list.html` to change layout and styling.
+
+### Modify Styling
+
+Update CSS files:
+- Main styles: `feed_reader/static/feed_reader/css/styles.css`
+- JavaScript: `feed_reader/static/feed_reader/js/app.js`
+
+## ⚠️ Troubleshooting
 
 ### "Bad Request (400)" Error
-- Check `ALLOWED_HOSTS` includes your domain
-- Ensure `DEBUG=False` in production
-- Remove protocol (`https://`) from `ALLOWED_HOSTS`
+**Cause**: `ALLOWED_HOSTS` misconfiguration
+- ✅ Solution: Ensure `ALLOWED_HOSTS` in `settings.py` includes your domain WITHOUT `https://`
+- Example: `news-feed-app-nffy.onrender.com` (not `https://news-feed-app-nffy.onrender.com`)
 
-### Static Files Not Loading
-- Run `python manage.py collectstatic --noinput`
-- Ensure WhiteNoise middleware is installed
-- Check `STATIC_ROOT` and `STATICFILES_DIRS` paths
+### Static Files Not Loading (CSS/JS broken)
+**Cause**: WhiteNoise not configured or `collectstatic` not run
+- ✅ Solution: Run `python manage.py collectstatic --noinput`
+- Verify `STATICFILES_STORAGE` is set to `whitenoise.storage.CompressedManifestStaticFilesStorage`
 
-### Database Migration Issues
-- Clear migrations: `python manage.py migrate --fake app 0001`
-- Rerun: `python manage.py migrate`
+### Feed Not Showing / Empty Page
+**Cause**: RSS feed URL is broken or inaccessible
+- ✅ Solution: Check network requests in browser DevTools
+- Verify the feed URL is still active (some feeds may be deprecated)
+- Check Django logs for feed parsing errors
 
-## License
+### Module Not Found Error During Deploy
+**Cause**: Missing `RssReader/RssReader/` nested module structure
+- ✅ Solution: Ensure proper structure:
+  ```
+  RssReader/
+  ├── RssReader/
+  │   ├── settings.py
+  │   ├── urls.py
+  │   └── wsgi.py
+  ├── manage.py
+  └── requirements.txt
+  ```
+
+### Render Build Fails
+**Cause**: Incorrect Root Directory or build command
+- ✅ Solution: Set in Render dashboard:
+  - **Root Directory**: `RssReader`
+  - **Build Command**: `pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput`
+  - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT RssReader.wsgi:application`
+
+## 📝 License
 
 MIT License
 
-## Author
+## 👤 Author
 
 Mohamed Imran
 
-## Live Demo
+## 🔗 Live Demo
 
 [News Feed App on Render](https://news-feed-app-nffy.onrender.com)
